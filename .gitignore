@@ -1,0 +1,42 @@
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Angular / Client Build
+client/dist/
+client/.angular/
+client/coverage/
+
+# Server Build
+server/dist/
+
+# Python / ML Service
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+ml-service/venv/
+ml-service/env/
+ml-service/.venv/
+ml-service/pip-log.txt
+ml-service/pip-delete-this-directory.txt
+
+# OS / IDE Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

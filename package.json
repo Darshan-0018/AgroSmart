@@ -1,0 +1,19 @@
+{
+  "name": "agrosmart",
+  "version": "1.0.0",
+  "description": "A full-stack web application using **MEAN Stack** (MongoDB, Express.js, Angular 21, Node.js) with a **Python ML microservice** that recommends optimal crops based on soil quality, weather conditions, and location. Includes real-time crop rate tracking across all 36 Indian States & UTs.",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently -n \"ML,Backend,Frontend\" -c \"bgYellow.bold,bgGreen.bold,bgBlue.bold\" \"npm run start:ml\" \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:ml": "cd ml-service && python app.py",
+    "start:backend": "cd server && npm run dev",
+    "start:frontend": "cd client && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}

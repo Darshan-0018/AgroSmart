@@ -62,6 +62,14 @@ export class AuthService {
     return this.http.get<{ success: boolean; user: User }>(`${this.apiUrl}/me`);
   }
 
+  forgotPassword(email: string): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, password: string): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/reset-password/${token}`, { password });
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

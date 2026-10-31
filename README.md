@@ -5,7 +5,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange.svg)](https://scikit-learn.org/)
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **AgroSmart** is a full-stack smart agriculture platform built on the **MEAN Stack** (MongoDB, Express.js, Angular 21, Node.js) paired with a **Python ML microservice**. It empowers farmers, agricultural enthusiasts, and agribusinesses to make data-driven farming decisions by predicting the most suitable crops based on soil nutrients and meteorological parameters, alongside real-time agricultural mandi commodity price tracking across all **36 Indian States & Union Territories**.
 
@@ -23,9 +23,9 @@
   - [3. Configure Environment Variables](#3-configure-environment-variables)
   - [4. Start All Services](#4-start-all-services)
 - [Environment Configuration](#-environment-configuration)
+- [Cloud Deployment Guide](#-cloud-deployment-guide)
 - [API Reference](#-api-reference)
 - [Machine Learning Microservice](#-machine-learning-microservice)
-- [Screenshots & UI](#-screenshots--ui)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -256,6 +256,44 @@ The script evaluates model accuracy, generates a classification report, and expo
 
 ---
 
+## 🌐 Cloud Deployment Guide
+
+AgroSmart can be deployed for free across modern cloud platforms:
+
+### 1. Database: MongoDB Atlas
+1. Create a free **M0 Cluster** on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+2. In **Network Access**, allow access from anywhere (`0.0.0.0/0`).
+3. In **Database Access**, create a user and copy the connection URI:
+   ```text
+   mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/crop-recommendation?retryWrites=true&w=majority
+   ```
+
+### 2. ML Microservice: Render (Python Web Service)
+- **Root Directory**: `ml-service`
+- **Runtime**: `Python 3`
+- **Build Command**: `pip install -r requirements.txt && python train_model.py`
+- **Start Command**: `gunicorn app:app`
+
+### 3. Backend API: Render (Node.js Web Service)
+- **Root Directory**: `server`
+- **Runtime**: `Node`
+- **Build Command**: `npm install`
+- **Start Command**: `node src/index.js`
+- **Environment Variables**:
+  - `MONGODB_URI`: *MongoDB Atlas connection URI*
+  - `ML_SERVICE_URL`: *Live URL of your Render ML service*
+  - `CLIENT_URL`: *Live Vercel frontend URL (or `*`)*
+  - `DATA_GOV_API_KEY`: *Your data.gov.in API key*
+
+### 4. Frontend SPA: Vercel
+- **Root Directory**: `client`
+- **Framework Preset**: Angular
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist/client/browser`
+- Single-page application rewrites are managed via `client/vercel.json`.
+
+---
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
@@ -269,4 +307,4 @@ Contributions, issues, and feature requests are welcome!
 
 ## 📄 License
 
-Distributed under the **ISC License**. See `LICENSE` for more information.
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.

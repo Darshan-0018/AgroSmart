@@ -16,7 +16,26 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: config.clientUrl,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+
+    // Allow wildcard by echoing the requesting origin so credentials: true works
+    if (config.clientUrl === '*') {
+      return callback(null, origin);
+    }
+
+    // Allow configured client URL, local development, or any Vercel domain
+    if (
+      origin === config.clientUrl ||
+      origin.startsWith('http://localhost:') ||
+      origin.endsWith('.vercel.app')
+    ) {
+      return callback(null, origin);
+    }
+
+    return callback(null, config.clientUrl);
+  },
   credentials: true,
 }));
 app.use(express.json());

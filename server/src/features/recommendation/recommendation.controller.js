@@ -8,15 +8,19 @@ exports.predict = async (req, res) => {
     const { N, P, K, temperature, humidity, ph, rainfall, state, season } = req.body;
 
     // Call ML service
-    const mlResponse = await axios.post(`${config.mlServiceUrl}/predict`, {
-      N: parseFloat(N),
-      P: parseFloat(P),
-      K: parseFloat(K),
-      temperature: parseFloat(temperature),
-      humidity: parseFloat(humidity),
-      ph: parseFloat(ph),
-      rainfall: parseFloat(rainfall),
-    });
+    const mlResponse = await axios.post(
+      `${config.mlServiceUrl}/predict`,
+      {
+        N: parseFloat(N),
+        P: parseFloat(P),
+        K: parseFloat(K),
+        temperature: parseFloat(temperature),
+        humidity: parseFloat(humidity),
+        ph: parseFloat(ph),
+        rainfall: parseFloat(rainfall),
+      },
+      { timeout: 60000 }
+    );
 
     const mlData = mlResponse.data;
 
@@ -33,10 +37,17 @@ exports.predict = async (req, res) => {
       data: recommendation,
     });
   } catch (error) {
+    console.error('Prediction error:', error.message);
+    if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+      return res.status(504).json({
+        success: false,
+        message: 'ML service is warming up. Please try again in a few seconds.',
+      });
+    }
     if (error.response) {
       return res.status(error.response.status).json({
         success: false,
-        message: error.response.data.error || 'ML service error',
+        message: error.response.data?.error || error.response.data?.message || 'ML service error',
       });
     }
     res.status(500).json({

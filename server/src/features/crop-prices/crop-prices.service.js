@@ -35,7 +35,7 @@ exports.fetchFromGovAPI = async (filters = {}) => {
     }
     return [];
   } catch (error) {
-    console.error('data.gov.in API error:', error.message);
+    console.error('data.gov.in API error:', error.message, error.response?.data || '');
     return null; // Return null to indicate API failure
   }
 };

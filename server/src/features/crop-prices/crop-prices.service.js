@@ -18,7 +18,14 @@ exports.fetchFromGovAPI = async (filters = {}) => {
     if (filters.district) params['filters[district]'] = filters.district;
 
     const url = `${config.dataGovBaseUrl}/${config.dataGovResourceId}`;
-    const response = await axios.get(url, { params, timeout: 10000 });
+    const response = await axios.get(url, {
+      params,
+      timeout: 15000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept': 'application/json, text/plain, */*',
+      },
+    });
 
     if (response.data && response.data.records) {
       return response.data.records.map(record => ({
